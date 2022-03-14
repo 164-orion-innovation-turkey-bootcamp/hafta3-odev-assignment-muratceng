@@ -17,21 +17,7 @@ export class SignUpComponent implements OnInit {
             this.router.navigate(['/Dashboard']);
         }
     }
-
-    // checkPasswords: ValidatorFn = (
-    //     registerForm: AbstractControl
-    //   ): ValidationErrors | null => {
-    //     let pass = this.signUpForm.get('password')!.value;
-    //     let confirmPass = this.signUpForm.get('passwordCheck')!.value;
-    //     if (pass != confirmPass) {
-    //       this.error = "Password doesn't match";
-    //     } else {
-    //       this.error = '';
-    //     }
-    //     return pass === confirmPass ? null : { notSame: true };
-    //   };
-
-    error=''
+    passError=''
 
     signUpForm = new FormGroup({
         email: new FormControl(null, [Validators.required, Validators.email]),
@@ -41,15 +27,24 @@ export class SignUpComponent implements OnInit {
     });
 
     onSubmit() {
-        let user = {
-            name: this.signUpForm.get("name")?.value,
-            email: this.signUpForm.get("email")?.value,
-            password: this.signUpForm.get("password")?.value
+        let pass=this.signUpForm.get('password')?.value;
+        let passCheck=this.signUpForm.get('passwordCheck')?.value;
+
+        if(pass == passCheck){
+            let user = {
+                name: this.signUpForm.get("name")?.value,
+                email: this.signUpForm.get("email")?.value,
+                password: this.signUpForm.get("password")?.value
+            }
+            this.userService.addUser(user).subscribe((res)=>{
+                console.log(res);
+                this.router.navigate(['/SignIn'])
+            })
+        }else{
+            this.passError ="Password does not match ";
         }
-        this.userService.addUser(user).subscribe((res)=>{
-            console.log(res);
-            this.router.navigate(['/SignIn'])
-        })
+
+       
 
     }
 
