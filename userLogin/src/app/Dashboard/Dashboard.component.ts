@@ -12,12 +12,14 @@ export class DashboardComponent implements OnInit{
 
     currentUser:any =undefined;
 
+    // kullanıcı çıkışında localstoragei siler ve giriş ekranına yönlendirir.
     logout(){
         localStorage.clear();
         this.router.navigate(['./SignIn'])
     }
     
     ngOnInit(): void {
+        //kullanıcı girişi varsa currentUser a eşitler yoksa giriş ekranına yönlendirir.
         if(this.userService.isLogIn()){
             let tmp = this.userService.getLocalStorage();
             this.currentUser=tmp;

@@ -17,20 +17,24 @@ export class SignInComponent implements OnInit {
 
     ngOnInit(): void {
 
+        //Kullanıcı girişi varsa sayfayı dashboarda yönlendirir.
         if(this.userService.isLogIn()){
             this.router.navigate(['./Dashboard'])
         }
         
+        //kullanıcı listesi doldurulur.
         this.userService.getUserList().subscribe((res) => {
             this.users = res as User[];
         });
     }
 
+    //formgroup tanımlanmıştır ve her alan için validasyon işlemleri tanımlanmıştır.
     signInForm = new FormGroup({
         email: new FormControl(null, [Validators.required, Validators.email]),
         password: new FormControl(null, [Validators.required])
     })
 
+    //kullanıcı eğer kullanıcı listesinde varsa local storage e yazılır ve dashboarda yönlendirilir.
     onSubmit() {
         if(this.checkUser()){
             let user = this.users.find((user)=>user.email==this.signInForm.get('email')?.value)
@@ -42,6 +46,7 @@ export class SignInComponent implements OnInit {
         
     }
 
+    // kullanıcı listesindeki email ve sifre eslesmesi durumunda true aksi halde false döndürür.
     checkUser(){
         let isLogged=false;
         this.users.map((user) => {
@@ -52,10 +57,12 @@ export class SignInComponent implements OnInit {
         return isLogged;
     }
 
+    // aldığı user i localstorage a yazar.
     writeLocalStorage(user: User) {
         localStorage.setItem('currentUser', JSON.stringify(user));
     }
 
+    // kayıt formuna yönlendirir.
     signUp() {
         this.router.navigate(['/SignUp']);
     }

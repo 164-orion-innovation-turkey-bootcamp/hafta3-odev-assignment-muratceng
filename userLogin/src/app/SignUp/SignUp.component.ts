@@ -13,12 +13,14 @@ export class SignUpComponent implements OnInit {
     constructor(private userService: UserService, private router:Router) { }
    
     ngOnInit(): void {
+        // eğer kullanıcı girişi varsa dashboarda yönlendirir.
         if(this.userService.isLogIn()){
             this.router.navigate(['/Dashboard']);
         }
     }
     passError=''
 
+    //formgroup tanımlanmıştır ve her alan için validasyon işlemleri tanımlanmıştır.
     signUpForm = new FormGroup({
         email: new FormControl(null, [Validators.required, Validators.email]),
         password: new FormControl(null, [Validators.required]),
@@ -26,6 +28,7 @@ export class SignUpComponent implements OnInit {
         passwordCheck: new FormControl(null, [Validators.required])
     });
 
+    // öncelikle formdan alınan iki şifrenin eşit olmasına bakar eğer eşitse kullanıcıyı jsona ekler sayfayı giriş ekranına yönlendirir.    
     onSubmit() {
         let pass=this.signUpForm.get('password')?.value;
         let passCheck=this.signUpForm.get('passwordCheck')?.value;
@@ -48,6 +51,7 @@ export class SignUpComponent implements OnInit {
 
     }
 
+    //sayfayı giriş ekranına yönlendirir.
     signIn(){
         this.router.navigate(['/SignIn']);
     }
